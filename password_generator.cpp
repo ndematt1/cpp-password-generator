@@ -2,7 +2,7 @@
 #include <iostream>               // imports the I/O stream library
 #include <string>                 // imports the std::string class
 #include <random>                 // imports the random number generation library
-
+#include <limits> 
 
 int getPasswordLength(){
     int password_length;
@@ -32,23 +32,22 @@ int getPasswordLength(){
 
 
 bool getYesNo(std::string prompt) {
-    int input; 
-
+    int input = -1;                                      
     do {
         std::cout << prompt;
         std::cin >> input;
 
         if (std::cin.fail()) {                       
-                std::cout << "Invalid input. Please enter 1 or 0.\n";
-                std::cin.clear();                         
-                std::cin.ignore();                        
-
-
+            std::cout << "Invalid input. Please enter 1 or 0.\n";
+            std::cin.clear();                         
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard entire line
+            input = -1;                                  // reset so loop continues
         } else if (input != 0 && input != 1) {        
-                std::cout << "Invalid input. Please enter 1 or 0.\n";
+            std::cout << "Invalid input. Please enter 1 or 0.\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard entire line
         }
 
-    }while (std::cin.fail() || (input != 0 && input != 1));
+    } while (input != 0 && input != 1);
 
     return input;
 }
